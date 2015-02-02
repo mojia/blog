@@ -1,22 +1,7 @@
 ---
 　　layout: default
-　　title: IOC容器阅读笔记
+　　title: 你好，世界
 ---
 <h2>{{ page.title }}</h2>
-<p>Ioc容器架构</p>
-<p>Ioc容器初始化流程</p>
-Ioc初始化的入口就是refresh方法（可以参看FileSystem）
-
->public FileSystemXmlApplicationContext(String[] configLocations, boolean refresh, ApplicationContext parent)
-throws BeansException {
-
-super(parent);
-setConfigLocations(configLocations);
-if (refresh) {
-refresh();
-}
-}
-
-<p>各个详细流程介绍</p>
-
+<p>我的第一篇文章</p>
 <p>{{ page.date | date_to_string }}</p>
