@@ -7,20 +7,36 @@
 
 -----------------------------------
 <p>Ioc容器初始化流程</p>
-1.Ioc初始化的入口就是refresh方法（可以参看FileSystem）
-
+1.Ioc初始化的入口就是refresh方法（可以参看FileSystemXmlApplicationContext类）
 <pre><code>public FileSystemXmlApplicationContext(String[] configLocations, boolean refresh, ApplicationContext parent)
     throws BeansException {
 
     super(parent);
     setConfigLocations(configLocations);
     if (refresh) {
-    refresh();
-    }
+        refresh();
+        }
     }
 </code></pre>
-
+该refresh方法标志着Ioc容器正式启动。其启动可以分为如下三个步骤：
+<ul>
+    <li><p>Resource定位(由ResourceLoader模块负责)</p></li>
+    <li><p>BeanDefinition载入，解析(由BeanDefinitionReader模块负责)</p></li>
+    将定义好的Bean载入，解析成Ioc容器内部的数据结构（BeanDefinition）。通过这个BeanDefinition，Ioc容器实现对Bean的管理。
+    <li><p>BeanDefinition注册</p></li>
+    该过程通过调用BeanDefinitionRegistry接口实现完成。其本质是将解析得到的BeanDefinition放入Ioc容器的HashMap中。
+        <pre><code>
+            //DefaultListableBeanFactory类中
+            // Map of bean definition objects, keyed by bean name
+            private final Map <String,BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String,BeanDefinition>();
+        </code></pre>
+</ul>
+另外这里强调下BeanDefinition的注册与Bean依赖的注入的区别：
+BeanDefinition的注册仅仅负责将BeanDefinition放入HashMap中即完成了注册。依赖的注入不是在Ioc容器启动的时候完成的。而是在getBean()实例的时候才
+触发依赖的注入。这两个是独立的过程。
 -----------------------------------
+
+
 <p>各个详细流程介绍</p>
 
 -----------------------------------
